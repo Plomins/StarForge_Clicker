@@ -1,6 +1,4 @@
-from pathlib import Path
-
-content = r'''# Спецификация требований к ПО
+'''# Спецификация требований к ПО
 
 ## StarForge Clicker
 
