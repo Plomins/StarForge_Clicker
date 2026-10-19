@@ -1,4 +1,5 @@
-'''# Спецификация требований к ПО
+'''
+# Спецификация требований к ПО
 
 ## StarForge Clicker
 
@@ -658,7 +659,4 @@ StarForge Clicker — одиночное офлайн-приложение, по
 
 **Конец документа.**
 '''
-path = Path("/mnt/data/srs.md")
-path.write_text(content, encoding="utf-8")
-print(f"Создан файл: {path}")
-print(f"Размер: {path.stat().st_size} байт")
+
