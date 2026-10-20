@@ -88,10 +88,10 @@ StarForge Clicker версии 1.x — настольная одиночная �
 |---|---|---|
 | `srs-template.md` | Структура документа SRS | Шаблон проекта |
 | `srs.md` | Спецификация требований StarForge Clicker | Текущий документ |
-| `ui-model.sysml` | Структурная модель интерфейса на SysML v2 | Проверить наличие и актуальность в репозитории |
-| `img/mockup-main.png` | Мокап главного экрана | Проверить наличие файла |
-| `img/mockup-upgrades.png` | Мокап магазина улучшений | Проверить наличие файла |
-| `img/mockup-achievements.png` | Мокап экрана достижений | Проверить наличие файла |
+| `ui-model.sysml` | Структурная модель интерфейса на SysML v2 | ui-model.sysml |
+| `img/mockup-main.png` | Мокап главного экрана | mockup-main.png |
+| `img/mockup-upgrades.png` | Мокап магазина улучшений | mockup-upgrades.png |
+| `img/mockup-achievements.png` | Мокап экрана достижений | mockup-achievements.png|
 | Репозиторий GitHub | Исходный код, документация и история изменений | https://github.com/Plomins/StarForge_Clicker |
 | Java 21 Documentation | Справочная документация платформы Java | https://docs.oracle.com/en/java/javase/21/ |
 | JavaFX Documentation | Справочная документация JavaFX | https://openjfx.io/ |
