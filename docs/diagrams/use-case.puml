@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Игрок\n(Player)" as Player
+actor "Таймер ОС\n(System Timer)" as Timer
+
+rectangle "Система StarForge Clicker" {
+  usecase "Добыть звёздную пыль\n(клик по ядру)" as UC_Click
+  usecase "Купить улучшение /\nпостройку" as UC_Buy
+  usecase "Собрать бонус\nGolden Star" as UC_GoldenStar
+  usecase "Выполнить\nГалактический Престиж" as UC_Prestige
+  usecase "Просмотреть достижения\nи статистику" as UC_Achievements
+  usecase "Настроить параметры\nи сбросить прогресс" as UC_Settings
+  usecase "Автосохранение и\nофлайн-доход" as UC_Save
+}
+
+Player --> UC_Click
+Player --> UC_Buy
+Player --> UC_GoldenStar
+Player --> UC_Prestige
+Player --> UC_Achievements
+Player --> UC_Settings
+
+Timer --> UC_Save
+Timer ..> UC_GoldenStar : <<trigger>>
+
+UC_GoldenStar .> UC_Click : <<extend>>
+UC_Buy .> UC_Save : <<include>>
+@enduml
