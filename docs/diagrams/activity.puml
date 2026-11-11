@@ -1,0 +1,29 @@
+@startuml
+|#F8F9F9|Игрок|
+start
+:Нажатие кнопки "Купить улучшение";
+
+|#EBF5FB|Интерфейс (View)|
+:Генерация события onBuy(Upgrade);
+
+|#E8F8F5|Контроллер (GameController)|
+:Вызов GameModel.buy(upgrade);
+
+|#FEF9E7|Модель (GameModel / SaveManager)|
+if (dust >= cost?) then (да)
+  :Списание пыли: dust -= cost;
+  :Инкремент уровня: level++;
+  :Проверка достижений;
+  |Интерфейс (View)|
+  :modelChanged();
+  :Обновление баланса и кнопок;
+  |Модель (GameModel / SaveManager)|
+  :Таймер 30с: SaveManager.save(model);
+else (нет: dust < cost)
+  |Контроллер (GameController)|
+  :Возврат false, воспроизведение отказа;
+endif
+
+|Игрок|
+stop
+@enduml
