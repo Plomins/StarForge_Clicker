@@ -1,0 +1,35 @@
+@startuml
+[*] --> Initialization
+
+state Initialization {
+  [*] --> LoadingConfig
+  LoadingConfig : entry / loadSettings()
+}
+
+Initialization --> OfflineCalculation : [файл сохранения найден]
+Initialization --> ActiveGameplay : [файл не найден / повреждён]
+
+OfflineCalculation : entry / calcOfflineDust()
+OfflineCalculation --> ActiveGameplay : начисление завершено
+
+state ActiveGameplay {
+  [*] --> Idle
+  Idle : do / renderUI()
+  
+  Idle --> ClickProcessing : onClick()
+  ClickProcessing : entry / dust += clickPower
+  ClickProcessing --> Idle : завершено
+  
+  Idle --> Upgrading : onBuy() [dust >= cost]
+  Upgrading : entry / dust -= cost; level++
+  Upgrading --> Idle : завершено
+  
+  Idle --> AutoSaving : Timer(30s)
+  AutoSaving : entry / SaveManager.save(model)
+  AutoSaving --> Idle : файл записан
+}
+
+ActiveGameplay --> Terminating : onClose()
+Terminating : entry / finalSave()
+Terminating --> [*]
+@enduml
