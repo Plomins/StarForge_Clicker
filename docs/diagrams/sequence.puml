@@ -1,0 +1,37 @@
+@startuml
+autonumber
+actor "Игрок" as Player
+participant ":UpgradesPanel" as View
+participant ":GameController" as Controller
+participant ":GameModel" as Model
+participant ":SaveManager" as Save
+
+Player -> View : clickBuyButton(DRILL)
+activate View
+View -> Controller : onBuy(DRILL)
+activate Controller
+Controller -> Model : buy(DRILL)
+activate Model
+
+Model -> Model : checkBalance(cost)
+alt dust >= cost (успех)
+    Model -> Model : dust -= cost; level++
+    Model -> Model : checkAchievements()
+    Model -->> View : modelChanged()
+    Model --> Controller : return true
+else dust < cost (отказ)
+    Model --> Controller : return false
+end
+
+opt таймер 30с сработал
+    Controller -> Save : save(model)
+    activate Save
+    Save -> Save : writeToBakAndSave()
+    Save --> Controller : success
+    deactivate Save
+end
+
+deactivate Model
+deactivate Controller
+deactivate View
+@enduml
