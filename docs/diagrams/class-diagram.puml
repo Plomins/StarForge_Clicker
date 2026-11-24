@@ -1,0 +1,123 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+package "clicker" {
+  class Main {
+    - frame: MainFrame
+    - controller: GameController
+    + main(args: String[]): void
+  }
+}
+
+package "clicker.controller" {
+  class GameController {
+    - model: GameModel
+    - saveManager: SaveManager
+    - tickTimer: Timer
+    - autoSaveTimer: Timer
+    + <<create>> GameController(m: GameModel)
+    + start(): void
+    + onClick(): void
+    + onBuy(u: Upgrade): void
+    + onReset(): void
+    + shutdown(): void
+  }
+}
+
+package "clicker.model" {
+  interface ModelListener {
+    + modelChanged(): void
+    + achievementUnlocked(a: Achievement): void
+  }
+
+  class GameModel {
+    - dust: double = 0.0
+    - totalEarned: double = 0.0
+    - totalClicks: long = 0
+    - playSeconds: double = 0.0
+    - levels: Map<Upgrade, Integer>
+    - unlocked: Set<Achievement>
+    - listeners: List<ModelListener>
+    + <<create>> GameModel()
+    + click(): void
+    + tick(seconds: double): void
+    + buy(u: Upgrade): boolean
+    + /getClickPower(): double
+    + /getPerSecond(): double
+    + /getLevel(): int
+    + restore(...): void
+    + reset(): void
+  }
+
+  class SaveManager {
+    - saveFile: Path
+    - backupFile: Path
+    - lastOfflineEarnings: double
+    + save(m: GameModel): void
+    + load(m: GameModel): boolean
+    + getLastOfflineEarnings(): double
+  }
+
+  enum Upgrade {
+    CLICK_POWER
+    DRILL
+    MINER
+    REACTOR
+    PORTAL
+    + cost(level: int): double
+    + getBaseCost(): double
+  }
+
+  enum Achievement {
+    FIRST_CLICK
+    HUNDRED_CLICKS
+    THOUSAND_DUST
+    FIRST_UPGRADE
+    + isReached(m: GameModel): boolean
+  }
+}
+
+package "clicker.service" {
+  class PrestigeService {
+    - darkMatter: double = 0.0
+    - bonusMultiplier: double = 1.0
+    + canPrestige(m: GameModel): boolean
+    + executePrestige(m: GameModel): void
+  }
+}
+
+package "clicker.view" {
+  class MainFrame {
+    - controller: GameController
+    - gamePanel: GamePanel
+    - upgradesPanel: UpgradesPanel
+    - achievementsPanel: AchievementsPanel
+    + <<create>> MainFrame(c: GameController)
+    + modelChanged(): void
+    + achievementUnlocked(a: Achievement): void
+    + refresh(): void
+  }
+
+  class UpgradesPanel {
+    - controller: GameController
+    - buyButtons: Map<Upgrade, JButton>
+    + updateView(m: GameModel): void
+  }
+}
+
+Main ..> GameController : <<create>>
+Main ..> MainFrame : <<create>>
+GameController --> "1" GameModel : -model
+GameController o-- "1" SaveManager : -saveManager
+SaveManager ..> GameModel : <<use>>
+GameModel --> "*" ModelListener : -listeners
+MainFrame ..|> ModelListener
+MainFrame --> "1" GameController : -controller
+MainFrame *-- "1" UpgradesPanel
+GameModel *-- "5" Upgrade
+GameModel *-- "12" Achievement
+PrestigeService ..> GameModel : <<use>>
+@enduml

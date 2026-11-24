@@ -1,0 +1,39 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam linetype ortho
+
+component "clicker.view (Swing UI)" <<subsystem>> as ViewSub {
+  component ":MainFrame" as MainFrame
+  component ":UpgradesPanel" as UpgradesPanel
+  component ":AchievementsPanel" as AchievementsPanel
+}
+
+component "clicker.controller" <<subsystem>> as CtrlSub {
+  component ":GameController" as GameController
+}
+
+component "clicker.model & services" <<subsystem>> as ModelSub {
+  component ":GameModel" as GameModel
+  component ":SaveManager" as SaveManager
+  component ":PrestigeService" as PrestigeService
+  component ":SoundPlayer" as SoundPlayer
+}
+
+interface IGameWindow
+interface IUserInput
+interface IPlayerActions
+interface IModelObserver
+interface "IGameCore & IPersistence" as ICore
+interface IFileStorage
+
+IGameWindow - ViewSub
+IUserInput - ViewSub
+ViewSub -( IPlayerActions
+IPlayerActions - CtrlSub
+ViewSub -( IModelObserver
+IModelObserver - ModelSub
+CtrlSub -( ICore
+ICore - ModelSub
+ModelSub - IFileStorage
+@enduml

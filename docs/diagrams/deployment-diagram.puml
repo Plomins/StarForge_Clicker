@@ -1,0 +1,37 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam linetype ortho
+
+node "ПК игрока (Windows / Linux / macOS)" <<device>> {
+  node "Среда выполнения JVM (JRE 17 LTS)" <<executionEnvironment>> as JVM {
+    artifact "starforge-clicker.jar" <<artifact>> as Jar {
+      folder "clicker" {
+        artifact "model.jar" <<library>>
+        artifact "controller.jar" <<library>>
+        artifact "view.jar" <<library>>
+      }
+      folder "resources" {
+        file "click.wav"
+        file "achievement.wav"
+      }
+    }
+  }
+
+  node "Локальная ФС ОС (~/.starforge-clicker/)" <<executionEnvironment>> as FS {
+    artifact "save.properties" <<artifact>> as SaveProp
+    file "save.properties.bak"
+  }
+
+  JVM -- FS : <<I/O>>
+}
+
+component "GameModel" <<component>> as CompModel
+component "SaveManager" <<component>> as CompSave
+interface IPersistence
+
+CompModel - IPersistence
+IPersistence )- CompSave
+Jar ..> CompModel : <<manifest>>
+SaveProp ..> CompSave : <<manifest>>
+@enduml
